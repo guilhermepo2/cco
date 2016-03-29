@@ -34,4 +34,4 @@ Y <- c(2.5, 1.0, 2.5, 0.5)
 z <- c(4.0, 5.0, 8.0, 8.5)
 n <- length(X)
 
-spline_linear(X,Y,z,n)
+# spline_linear(X,Y,z,n)
