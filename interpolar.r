@@ -7,18 +7,23 @@ source("spline_quadratica.r")
 
 # Xs -> pontos dados
 # Zs -> pontos a se "encontrar" dentro de um intervalo em Xs.
-# tamanho -> quantos pontos Xs devem ser utilizados. O "tamanho" pode ser no maximo
-#            igual ao numero de elementos em Xs. E o valor minimo depende do menor
-#            intervalo encontrado que "caiba" os pontos Zs.
-#
-# RETURN: um array com as posicoes correspondentes aos pontos selecionados do intervalo.
+# tamanho -> quantos pontos Xs devem ser utilizados. O "tamanho" deve ser no maximo
+#            igual ao numero de elementos em Xs. E deve ser no minimo igual ao tamanho do
+#            'intervalo_minimo' encontrado que "caiba" os pontos Zs.
+#            
+# RETURN: as posicoes dos pontos selecionados para o intervalo.
 #         Assim, essas posicoes podem ser facilmente utilizadas para pegar os pontos Xs
 #         e tambem os pontos Ys: ' Xs[achar_intervalo(...)] '.
 achar_intervalo <- function(Xs, Zs, tamanho)
 {
+	if(tamanho >= length(Xs)){
+		print(sprintf('WARNING: O tamanho maximo do intervalo eh de %d, e foi pedido um de %d', length(Xs), tamanho))
+		return(seq(1, length(Xs)))
+	}
+	
+	# encontra a posicao do 'menor-maior' e do 'maior-menor' X em relacao aos Zs
 	menor_z <- min(Zs)
 	maior_z <- max(Zs)
-	
 	maior_i <- length(Xs)
 	menor_i <- 1
 	for(i in 1:length(Xs))
@@ -33,17 +38,15 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 			maior_i <- i
 		}	
 	}
-	intervalo <- seq(menor_i, maior_i)
+	intervalo_min <- seq(menor_i, maior_i)
 
-	# caso o intervalo minimo tenha o tamanho escolhido, o processo sera finalizado
-	# retornando o intervalo.
-	if(tamanho == length(intervalo)){
-		return(intervalo)
-	} else if(tamanho < length(intervalo)) {
-		print(sprintf('WARNING: O tamanho minimo do intervalo eh de %d, e foi pedido um de %d', length(intervalo), tamanho))
-		return(intervalo)
-	} else if(tamanho > length(Xs)){
-		print(sprintf('WARNING: O tamanho maximo do intervalo eh de %d, e foi pedido um de %d', length(Xs), tamanho))
+	# caso tamanho escolhido for igual ao tamanho do intervalo minimo, 
+	# o processo sera finalizado, retornando o intervalo.
+	if(tamanho == length(intervalo_min)){
+		return(intervalo_min)
+	} else if(tamanho < length(intervalo_min)) {
+		print(sprintf('WARNING: O tamanho minimo do intervalo eh de %d, e foi pedido um de %d', length(intervalo_min), tamanho))
+		return(intervalo_min)
 	}
 
 	# criando dois vetores: maiores e menores. Nesses vetores estao os indices dos numeros
@@ -52,7 +55,9 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 	if(menor_i == 1) {
 		menores = c()
 	} else {
-		menores = seq(1, menor_i-1)
+		menores = seq(menor_i-1, 1)
+		# eh uma sequencia decrescente porque os primeiros a serem inseridos no intervalo
+		# devem ser os maiores.
 	}
 	if(maior_i == length(Xs)) {
 		maiores = c()
@@ -60,7 +65,9 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 		maiores = seq(maior_i+1, length(Xs))
 	}
 
-	res <- intervalo
+	# checando a relacao entre a quantidade de maiores e a de menores, e guardando a parte
+	# que sobrar de um dos dois em 'resto'.
+	res <- intervalo_min
 	resto <- c()
 	if(length(menores) > length(maiores)) {
 		qtd = length(maiores)
@@ -72,10 +79,12 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 		qtd = length(menores)
 	}
 
-	if(qtd != 0) {
-		for (i in 1:qtd) {
-			res <- c(res, menores[i], maiores[i])
-		}
+	# cria o vetor 'res' que possui todos os indices dos Xs de acordo com a seguinte ordem:
+	#   1) elementos do intervalo minimo
+	#   2) elementos dos vetores 'menores' e 'maiores' intercalados ate que um dos dois se esgote
+	#   3) resto dos elementos do vetor mais longo entre os 'maiores' e 'menores'
+	for (i in 1:qtd) {
+		res <- c(res, menores[i], maiores[i])
 	}
 	res <- c(res, resto)
 	res <- sort(res[1:tamanho])
