@@ -1,32 +1,39 @@
 
 
-lagrange <- function(X, Y, n, x)
+lagrange <- function(Xs, Ys, Zs)
 {
-	R <- 0
-	Ls <- c()
-	for(i in 1:n) {
-		C <- 1
-		D <- 1
-		for (j in 1:n) {
-			if(i != j){
-				C <- C * (x - X[j])
-				D <- D * (X[i] - X[j])
+	n <- length(Xs)
+	
+	cat("        P(x) = L(i) * F(Xi) + ...\n")
+	interpolados <- c()
+	for(z in Zs) {	
+		R <- 0
+		Ls <- c()
+		for(i in 1:n) {
+			C <- 1
+			D <- 1
+			for (j in 1:n) {
+				if(i != j){
+					C <- C * (z - Xs[j])
+					D <- D * (Xs[i] - Xs[j])
+				}
 			}
+			L <- (C/D)
+			Ls <- c(Ls, L)
+			R <- R + Ys[i] * L
 		}
-		L <- (C/D)
-		Ls <- c(Ls, L)
-		R <- R + Y[i] * L
+
+		cat(sprintf("Polinomio para o ponto %f : ", z))
+		for(i in 1:(n-1)) {
+			cat(sprintf("%f * %f +", Ls[i], Ys[i]))
+		}
+		cat(sprintf("%f * %f\n", Ls[i+1], Ys[i+1]))
+		
+		sprintf("Resultado: %f", R)
+		interpolados <- c(interpolados, R)
 	}
-	
-	polinomio <- "Polinomio: "
-	for(i in 1:(n-1)) {
-		polinomio = paste(polinomio, sprintf("%f * %f +", Ls[i], Y[i]))
-	}
-	polinomio = paste(polinomio, sprintf("%f * %f", Ls[i+1], Y[i+1]))
-	print(polinomio)
-	
-	
-	sprintf("Resultado: %f", R)
+	print(interpolados)
+	return(interpolados)
 }
 
 
@@ -34,6 +41,6 @@ lagrange <- function(X, Y, n, x)
 plotar <- function()
 {
 	x_plot <- seq(from=1, to=6, length.out = 100)
-	plot(x_plot, lagrange(c(1,4,6), c(0, 1.386294, 1.791759), 2, 3), type="l", col="green")
+	plot(x_plot, lagrange(c(1,4,6), c(0, 1.386294, 1.791759), c(2, 3)), type="l", col="green")
 	lines(x_plot, log(x_plot), col="red")
 }
