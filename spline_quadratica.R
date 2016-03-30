@@ -54,10 +54,39 @@ spline_quadratica <- function(X,Y,z,n)
 	}
 	
 	coeficientes <- solve(matriz_coeficientes, matriz_diferenca_divididas)
-	print(matriz_diferenca_divididas)	
-	print(matriz_coeficientes)	
-	print(coeficientes)
 	
+	# pegando os coeficientes
+	
+	bi <- c(coeficientes[1])
+	ci <- c(0)
+	for(i in 2:length(coeficientes))
+	{
+		if(i %% 2==0)
+		{
+			bi <- c(bi, coeficientes[i])
+		}
+		else {
+			ci <- c(ci, coeficientes[i])
+		}
+	}
+
+	# Interpolando os pontos desejados
+	resultados <- c()
+	for(i in z)
+	{
+		# i é o valor de z que é o valor a ser interpolado
+		for(j in 1:n)
+		{
+			if(i > X[j] && i < X[j+1])
+			{
+				res <- Ai[j] + bi[j] * (i - X[j]) + ci[j] * ((i - X[j])^2)
+				resultados <- c(resultados, res)
+			}
+		}
+	}
+	
+	print (resultados)
+	return(resultados)
 	
 }
 
