@@ -1,5 +1,5 @@
 
-source("cco-interpolacaonewton.r")
+source("newton.r")
 source("lagrange.r")
 source("spline_linear.r")
 source("spline_quadratica.r")
