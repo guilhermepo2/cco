@@ -8,7 +8,7 @@
 # 	Ao invés de passar os pontos, passar a função
 
 
-interpolacao_newton <- function(x, y, zi, n, valor_verdadeiro = NULL)
+interpolacao_newton <- function(Xs, Ys, Zs)
 {
 	# x -> conjunto de valores no eixo x
 	# y -> conjunto de valores no eixo y
@@ -16,41 +16,28 @@ interpolacao_newton <- function(x, y, zi, n, valor_verdadeiro = NULL)
 	# n -> quantidade de pontos
 	# valor_verdadeiro <- valor verdadeiro de um ponto que deseja se calcular o erro
 	
-	y_resultado <- c()
-	B <- y
-	erro <- 0
-	
+	n <- length(Xs)
+	B <- Ys
 	for(k in 1:(n-1))
 	{
 		for(i in n:(k+1))
 		{
-			B[i] <- (B[i] - B[i-1])/(x[i] - x[i-k])
+			B[i] <- (B[i] - B[i-1])/(Xs[i] - Xs[i-k])
 		}
 	}
 	
-	
 	# Avaliando o valor do polinômio nos pontos Z
-	
-	for(z in zi)
+	y_resultado <- c()
+	for(z in Zs)
 	{
 		R <- B[n]
 		for (i in (n-1):1)
 		{
-			R <- R * (z - x[i]) + B[i]
-			
+			R <- R * (z - Xs[i]) + B[i]
 		}
-		
-		if(!missing(valor_verdadeiro) && length(zi) == 1) 
-		{
-			erro <- abs((valor_verdadeiro - R) / valor_verdadeiro)
-			string_erro <- sprintf("Erro Relativo Verdadeiro: %f%%", erro*100)
-			print(string_erro)
-		}
-	y_resultado <- c(y_resultado, R)
+		y_resultado <- c(y_resultado, R)
 	}
 	
-	# Criando string para exibir o resultado e o polinomio
-	resultado <- sprintf("Resultado: %f", R)
 	polinomio <- "Polinomio: "
 	for(i in 1:length(B)-1)
 	{
@@ -63,8 +50,8 @@ interpolacao_newton <- function(x, y, zi, n, valor_verdadeiro = NULL)
 	
 	
 	# Imprimindo o Resultado e o Polinomio
-	print(resultado)
 	print(polinomio)
+	print(y_resultado)
 	return (y_resultado)
 }
 
@@ -102,7 +89,7 @@ exercicio <- function()
 	y_func <- (1 / (1 + (25*x_func*x_func)))
 	x_plot <- seq(from=-1, to=1, length.out=100)
 	
-	y_interpolacao <- interpolacao_newton(x_func, y_func, x_plot,length(x_func))
+	y_interpolacao <- interpolacao_newton(x_func, y_func, x_plot)
 	
 	plot(x_plot, y_interpolacao, type="l", col="green")
 	lines(x_plot, (1 / (1 + (25*x_plot*x_plot))), col="red")
@@ -111,6 +98,6 @@ exercicio <- function()
 plotar <- function()
 {
 	x_plot <- seq(from=1, to=6, length.out = 100)
-	plot(x_plot, interpolacao_newton(c(1,4,6), c(0, 1.386294, 1.791759), x_plot, 3), type="l", col="green")
+	plot(x_plot, interpolacao_newton(c(1,4,6), c(0, 1.386294, 1.791759), x_plot), type="l", col="green" )
 	lines(x_plot, log(x_plot), col="red")
 }
