@@ -17,7 +17,8 @@ source("spline_quadratica.r")
 achar_intervalo <- function(Xs, Zs, tamanho)
 {
 	if(tamanho >= length(Xs)){
-		print(sprintf('WARNING: O tamanho maximo do intervalo eh de %d, e foi pedido um de %d', length(Xs), tamanho))
+		if(tamanho > length(Xs))
+			print(sprintf('WARNING: O tamanho maximo do intervalo eh de %.0f, e foi pedido um de %.0f', length(Xs), tamanho))
 		return(seq(1, length(Xs)))
 	}
 	
@@ -45,7 +46,7 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 	if(tamanho == length(intervalo_min)){
 		return(intervalo_min)
 	} else if(tamanho < length(intervalo_min)) {
-		print(sprintf('WARNING: O tamanho minimo do intervalo eh de %d, e foi pedido um de %d', length(intervalo_min), tamanho))
+		print(sprintf('WARNING: O tamanho minimo do intervalo eh de %.0f, e foi pedido um de %.0f', length(intervalo_min), tamanho))
 		return(intervalo_min)
 	}
 
@@ -92,7 +93,7 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 	return(res)
 }
 
-interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", valores_verdadeiros= NULL)
+interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", valores_verdadeiros= NULL)
 {
 	# Xs -> conjunto de valores no eixo Xs
 	# Y -> conjunto de valores no eixo y
@@ -112,9 +113,25 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 			Ys_interpolados <- lagrange(Xs, Ys, Zs)
 		}
 	)
+
+	plot(Xs, Ys, type='l', col="blue")
+	points(Zs, Ys_interpolados,  col='red'
 	
-	
-	# erro <- abs((valor_verdadeiro - R) / valor_verdadeiro)
-	# string_erro <- sprintf("Erro Relativo Verdadeiro: %f%%", erro*100)
-	# print(string_erro)
+	if(!missing(valores_verdadeiros)) {
+		erros <- abs(Ys_interpolados - valores_verdadeiros)
+		erro <- mean(erros)
+		string_erro <- sprintf("Erro Relativo Verdadeiro: %.4f%%", erro*100)
+		print(string_erro)
+		points(Zs, valores_verdadeiros, col="green")
+	}
 }
+
+
+teste <- function() {
+	Xs = seq(1, 10, length.out=100)
+	interpolar(Xs, log(Xs), c(2, 3, 5), valores_verdadeiros=c(0.69314, 1.09861, 1.60943))
+}
+
+
+
+
