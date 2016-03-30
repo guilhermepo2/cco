@@ -92,11 +92,29 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 	return(res)
 }
 
-interpolar <- function(Xs,y,Zs,n, metodo="t",valor_verdadeiro = NULL)
+interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", valores_verdadeiros= NULL)
 {
 	# Xs -> conjunto de valores no eixo Xs
 	# Y -> conjunto de valores no eixo y
 	# Zs -> valores a serem interpolados (eixo Xs)
 	# n -> quantidade de pontos
 	# valor_verdadeiro -> valor verdadeiro do ponto interpolado (valido somente se passar apenas um ponto para ser interpolado)
+	
+	indices <- achar_intervalo(Xs, Zs, nro_pontos)
+	Xs <- Xs[indices]
+	Ys <- Ys[indices]
+	
+	switch (metodo,
+		newton = {
+			Ys_interpolados <- interpolacao_newton(Xs, Ys, Zs)
+		},
+		lagrange = {
+			Ys_interpolados <- lagrange(Xs, Ys, Zs)
+		}
+	)
+	
+	
+	# erro <- abs((valor_verdadeiro - R) / valor_verdadeiro)
+	# string_erro <- sprintf("Erro Relativo Verdadeiro: %f%%", erro*100)
+	# print(string_erro)
 }
