@@ -8,28 +8,56 @@ spline_quadratica <- function(X,Y,z,n)
 	tamanho_incognitas <- 2 * n - 3
 	
 	# Calculando os indices ai das splines
+	# Condição 1
 	Ai <- Y
 	
-	# Calculando os indices bi
-	# Forma dos indices bi:
-	#		f(x(i+1)) - f(xi) / (x(i+1) - xi) * (x - xi)
-	Bi <- c() # indices bi
-	Hi <- c() # denominador da diferenca dividida
+	#Condição 2 - Primeiras 3 linhas da Matriz
+	ddv <- seq(0,0, length.out = tamanho_incognitas) # diferencas divididas
+	Hi <- c() # (xi+1 - xi)
 	for(i in 1:(n-1))
 	{
 		Hi[i] <- (X[i+1] - X[i])
-		Bi[i] <- (Y[i+1] - Y[i]) / Hi[i]
+		ddv[i] <- (Y[i+1] - Y[i]) / Hi[i]
 	}
-		
-		
-	# Preencho o vetor de Bi com 0 para que fique com o tamanho do numero de incognitas
-	for(i in n:tamanho_incognitas)
-		Bi[i] <- 0
-		
-	# Fazendo a matriz transposta do vetor de Bi
-	matriz_diferencas_divididas <- matrix(Bi, nrow=tamanho_incognitas, 1)
+	
+	matriz_diferenca_divididas <- matrix(ddv, nrow=tamanho_incognitas, 1)
+	matriz_coeficientes <- matrix(0, nrow=tamanho_incognitas, ncol = tamanho_incognitas)
 	
 	# Calcular a matriz (tamanho x tamanho)
+	
+	# Primeira Linha da Matriz
+	matriz_coeficientes[1,1] <- 1 
+	j <- 2
+	
+	for(i in 2:(n-1))
+	{
+		matriz_coeficientes[i,j] <- 1
+		matriz_coeficientes[i,j+1] <- Hi[i]
+		j <- j+2
+	}
+	
+	# Condição 3 - Ultimas Linhas da Matriz
+	# bi+1 = bi + cihi
+	# b1 = b0 + h0c0 => b1 = b0
+	matriz_coeficientes[i+1,1] <- 1
+	matriz_coeficientes[i+1,2] <- -1
+	
+	auxiliar_h <- 2
+	k <- 4
+	for(j in ((i+2):tamanho_incognitas))
+	{
+		matriz_coeficientes[j,k-2] <- 1
+		matriz_coeficientes[j,k-1] <- 2 * Hi[auxiliar_h]
+		matriz_coeficientes[j,k] <- -1
+		auxiliar_h <- auxiliar_h + 1
+		k <- k + 2
+	}
+	
+	coeficientes <- solve(matriz_coeficientes, matriz_diferenca_divididas)
+	print(matriz_diferenca_divididas)	
+	print(matriz_coeficientes)	
+	print(coeficientes)
+	
 	
 }
 
@@ -38,4 +66,4 @@ Y <- c(2.5, 1.0, 2.5, 0.5)
 z <- c(4.0, 5.0, 8.0, 8.5)
 n <- length(X)
 
-# spline_quadratica(X,Y,z,n)
+spline_quadratica(X,Y,z,n)
