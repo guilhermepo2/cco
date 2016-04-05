@@ -53,8 +53,6 @@ spline_quadratica <- function(X,Y,z,n)
 		auxiliar_h <- auxiliar_h + 1
 		k <- k + 2
 	}
-	
-	print("OI")
 	coeficientes <- solve(matriz_coeficientes, matriz_diferenca_divididas)
 	
 	# pegando os coeficientes
@@ -87,7 +85,7 @@ spline_quadratica <- function(X,Y,z,n)
 		}
 	}
 	
-	print (resultados)
+	# print (resultados)
 	return(resultados)
 	
 }

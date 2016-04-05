@@ -123,8 +123,6 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", v
 		}
 	)
 	
-	print(Zs)
-	print(Ys_interpolados)
 	plot(Xs, Ys, type='l', col="blue")
 	points(Zs, Ys_interpolados,  col='red')
 	
