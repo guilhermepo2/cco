@@ -1,4 +1,3 @@
-
 source("newton.r")
 source("lagrange.r")
 source("spline_linear.r")
@@ -14,6 +13,7 @@ source("spline_quadratica.r")
 # RETURN: as posicoes dos pontos selecionados para o intervalo.
 #         Assim, essas posicoes podem ser facilmente utilizadas para pegar os pontos Xs
 #         e tambem os pontos Ys: ' Xs[achar_intervalo(...)] '.
+
 achar_intervalo <- function(Xs, Zs, tamanho)
 {
 	if(tamanho >= length(Xs)){
@@ -105,17 +105,28 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", v
 	Xs <- Xs[indices]
 	Ys <- Ys[indices]
 	
+	print(Xs)
+	print(Ys)
+	
 	switch (metodo,
 		newton = {
 			Ys_interpolados <- interpolacao_newton(Xs, Ys, Zs)
 		},
 		lagrange = {
 			Ys_interpolados <- lagrange(Xs, Ys, Zs)
+		},
+		spline_linear = {
+			Ys_interpolados <- spline_linear(Xs, Ys, Zs, length(Xs))
+		},
+		spline_quadratica = {
+			Ys_interpolados <- spline_quadratica(Xs, Ys, Zs, length(Xs))
 		}
 	)
-
+	
+	print(Zs)
+	print(Ys_interpolados)
 	plot(Xs, Ys, type='l', col="blue")
-	points(Zs, Ys_interpolados,  col='red'
+	points(Zs, Ys_interpolados,  col='red')
 	
 	if(!missing(valores_verdadeiros)) {
 		erros <- abs(Ys_interpolados - valores_verdadeiros)

@@ -14,6 +14,7 @@ spline_quadratica <- function(X,Y,z,n)
 	#Condição 2 - Primeiras 3 linhas da Matriz
 	ddv <- seq(0,0, length.out = tamanho_incognitas) # diferencas divididas
 	Hi <- c() # (xi+1 - xi)
+
 	for(i in 1:(n-1))
 	{
 		Hi[i] <- (X[i+1] - X[i])
@@ -53,6 +54,7 @@ spline_quadratica <- function(X,Y,z,n)
 		k <- k + 2
 	}
 	
+	print("OI")
 	coeficientes <- solve(matriz_coeficientes, matriz_diferenca_divididas)
 	
 	# pegando os coeficientes
@@ -95,4 +97,4 @@ Y <- c(2.5, 1.0, 2.5, 0.5)
 z <- c(4.0, 5.0, 8.0, 8.5)
 n <- length(X)
 
-spline_quadratica(X,Y,z,n)
+# spline_quadratica(X,Y,z,n)
