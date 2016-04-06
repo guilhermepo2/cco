@@ -105,9 +105,6 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", v
 	Xs <- Xs[indices]
 	Ys <- Ys[indices]
 	
-	print(Xs)
-	print(Ys)
-	
 	switch (metodo,
 		newton = {
 			Ys_interpolados <- interpolacao_newton(Xs, Ys, Zs)
@@ -124,7 +121,11 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", v
 	)
 	
 	plot(Xs, Ys, type='l', col="blue")
-	points(Zs, Ys_interpolados,  col='red')
+	lines(Zs, Ys_interpolados,  col='red')
+
+
+	print("Valores Interpolados: ")
+	print(Ys_interpolados)
 	
 	if(!missing(valores_verdadeiros)) {
 		erros <- abs(Ys_interpolados - valores_verdadeiros)
@@ -133,6 +134,8 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", v
 		print(string_erro)
 		points(Zs, valores_verdadeiros, col="green")
 	}
+	
+	return(Ys_interpolados)
 }
 
 
