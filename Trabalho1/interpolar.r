@@ -16,12 +16,14 @@ source("spline_quadratica.r")
 
 achar_intervalo <- function(Xs, Zs, tamanho)
 {
-	if(tamanho >= length(Xs)){
+	# caso em que o intervalo retornado será todos os Xs.
+	if(tamanho >= length(Xs)) {
 		if(tamanho > length(Xs))
 			print(sprintf('WARNING: O tamanho maximo do intervalo eh de %.0f, e foi pedido um de %.0f', length(Xs), tamanho))
 		return(seq(1, length(Xs)))
 	}
-	
+# como o tamanho é menor que length(Xs), temos que tirar elementos de Xs
+
 	# encontra a posicao do 'menor-maior' e do 'maior-menor' X em relacao aos Zs
 	menor_z <- min(Zs)
 	maior_z <- max(Zs)
@@ -39,16 +41,24 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 			maior_i <- i
 		}	
 	}
+	# intervalo mínimo são todos os Xs que estao no intervalo (menor_z, menor_z)
 	intervalo_min <- seq(menor_i, maior_i)
 
-	# caso tamanho escolhido for igual ao tamanho do intervalo minimo, 
-	# o processo sera finalizado, retornando o intervalo.
-	if(tamanho == length(intervalo_min)){
-		return(intervalo_min)
-	} else if(tamanho < length(intervalo_min)) {
-		print(sprintf('WARNING: O tamanho minimo do intervalo eh de %.0f, e foi pedido um de %.0f', length(intervalo_min), tamanho))
+
+	# caso verdade, não precisaremos pegar mais elementos de Xs para completar
+	# o intervalo. Iremos no máximo diminuir o intervalo.
+	if(tamanho <= length(intervalo_min)) {
+		if(tamanho == 2) {
+			intervalo_min <- c(intervalo_min[1], intervalo_min[length(intervalo_min)])
+		} else if (tamanho > 2) {
+			escolhidos <- sample(intervalo_min[2:(length(intervalo_min)-1)], tamanho-2, replace=FALSE)
+			intervalo_min <- c(intervalo_min[1], escolhidos, intervalo_min[length(intervalo_min)])
+			intervalo_min <- sort(intervalo_min)
+		}
 		return(intervalo_min)
 	}
+# como voce quer um intervalo maior do que o intervalo minimo, precisamos
+# adicionar outros elementos de Xs nesse intervalo.
 
 	# criando dois vetores: maiores e menores. Nesses vetores estao os indices dos numeros
 	# que nao estavam no intervalo minimo. No *maiores* estao os indices mais a direita
@@ -93,7 +103,7 @@ achar_intervalo <- function(Xs, Zs, tamanho)
 	return(res)
 }
 
-interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", valores_verdadeiros= NULL)
+interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", valores_verdadeiros= NULL)
 {
 	# Xs -> conjunto de valores no eixo Xs
 	# Y -> conjunto de valores no eixo y
@@ -123,14 +133,27 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "lagrange", v
 	plot(Xs, Ys, type='l', col="blue")
 	lines(Zs, Ys_interpolados,  col='red')
 
-
 	print("Valores Interpolados: ")
 	print(Ys_interpolados)
 	
+	if(length(Zs) == 1) {
+		points(Zs, Ys_interpolados,  col='yellow')
+	} else {
+		lines(Zs, Ys_interpolados,  col='yellow')
+	}
+	lines(Xs, 0*Ys, col='black')
+	lines(0*Xs, Ys, col='black')
+
+	
+	#TODO a professora quer o erro pra cada ponto
 	if(!missing(valores_verdadeiros)) {
 		erros <- abs(Ys_interpolados - valores_verdadeiros)
+		erros <- erros * 100
+		for(i in 1:length(erros)){
+			cat(sprintf("Erro Relativo Verdadeiro para o ponto %.4f : %.4f%% \n", Zs[i], erros[i]))
+		}
 		erro <- mean(erros)
-		string_erro <- sprintf("Erro Relativo Verdadeiro: %.4f%%", erro*100)
+		string_erro <- sprintf("Media dos erros Relativos Verdadeiros: %.4f%%", erro)
 		print(string_erro)
 		points(Zs, valores_verdadeiros, col="green")
 	}
