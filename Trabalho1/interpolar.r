@@ -2,6 +2,7 @@ source("newton.r")
 source("lagrange.r")
 source("spline_linear.r")
 source("spline_quadratica.r")
+source("spline_cubica.r")
 
 
 # Xs -> pontos dados
@@ -127,6 +128,9 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 		},
 		spline_quadratica = {
 			Ys_interpolados <- spline_quadratica(Xs, Ys, Zs, length(Xs))
+		},
+		spline_cubica = {
+			Ys_interpolados <- spline_cubica_natural(Xs,Ys,Zs,length(Xs)-1)
 		}
 	)
 	

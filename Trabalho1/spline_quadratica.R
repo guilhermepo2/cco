@@ -75,9 +75,9 @@ spline_quadratica <- function(X,Y,z,n)
 	for(i in z)
 	{
 		# i é o valor de z que é o valor a ser interpolado
-		for(j in 1:n)
+		for(j in 1:(n-1))
 		{
-			if(i > X[j] && i < X[j+1])
+			if(i >= X[j] && i <= X[j+1])
 			{
 				res <- Ai[j] + bi[j] * (i - X[j]) + ci[j] * ((i - X[j])^2)
 				resultados <- c(resultados, res)
@@ -89,10 +89,3 @@ spline_quadratica <- function(X,Y,z,n)
 	return(resultados)
 	
 }
-
-X <- c(3.0, 4.5, 7.0, 9.0)
-Y <- c(2.5, 1.0, 2.5, 0.5)
-z <- c(4.0, 5.0, 8.0, 8.5)
-n <- length(X)
-
-# spline_quadratica(X,Y,z,n)

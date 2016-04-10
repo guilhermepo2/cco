@@ -55,7 +55,7 @@ exercicio04 <- function()
 {
 	xe <- c(0, 0.5, 1.0, 1.5, 2.0)
 	ye <- c(3.0, 1.8616, -0.5571, 4.1987, -9.0536)
-	ze <- seq(from=0.1, to=1.9, length.out = 100)
-	interpolar(xe,ye,0.25,metodo="spline_linear")
+	ze <- seq(from=0, to=2.0, length.out = 100)
+	interpolar(xe,ye,ze,metodo="spline_cubica")
 }
 
