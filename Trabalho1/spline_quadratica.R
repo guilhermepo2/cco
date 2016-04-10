@@ -1,19 +1,33 @@
+# As splines quadráticas são equações do tipo
+#     Si(X) = Ai + Bi * (X - Xi) + Ci (X - Xi)^2
+# 
+# É necessário criar 1 spline, igual acima, para cada ponto menos
+# o último, assim, teremos
+#     (N_pontos-1) splines.
+# Como os Ais são iguais aos Yis, temos 2 incógnitas (Bi e Ci) para
+# cada spline. Por isso, ao todo teremos 
+#     2 * (N-1) incógnitas.
+# No entanto, para garantir que a segunda derivada no ponto X1 seja nula,
+# C1 deve ser igual a 0. Assim, temos menos uma incógnita.
+#     2 * (N-1) -1 incógnitas.
 spline_quadratica <- function(X,Y,z,n)
 {
-	# 2 variaveis para cada spline (n-1 splines)
-	# 2 * (n-1) = 2n - 2
-	# Mas, c0 é definido como 0, então
-	# incognitas = 2n - 2 - 1 = 2n - 3
-	
+
 	tamanho_incognitas <- 2 * n - 3
 	
 	# Calculando os indices ai das splines
-	# Condição 1
+# Condição 1 - Si(X) = Yi, para garantir continuidade
 	Ai <- Y
 	
-	#Condição 2 - Primeiras 3 linhas da Matriz
-	ddv <- seq(0,0, length.out = tamanho_incognitas) # diferencas divididas
-	Hi <- c() # (xi+1 - xi)
+# Condição 2 - Primeiras 3 linhas da Matriz
+#     Si(Xi+1) = Si+1 (Xi+1), para garantir que splines adjacentes 
+#       se conectem nos pontos internos.
+#   Após matematicar, temos as seguintes condições:
+#     Bi + Ci * (Xi+1 - Xi) = (Yi+1 - Yi) / (Xi+1 - Xi)
+
+    # ddv -> diferencas divididas -> (Yi+1 - Yi) / (Xi+1 - Xi)
+	ddv <- seq(0,0, length.out = tamanho_incognitas)
+	Hi <- c() # (Xi+1 - Xi)
 
 	for(i in 1:(n-1))
 	{
@@ -37,7 +51,7 @@ spline_quadratica <- function(X,Y,z,n)
 		j <- j+2
 	}
 	
-	# Condição 3 - Ultimas Linhas da Matriz
+# Condição 3 - Últimas Linhas da Matriz
 	# bi+1 = bi + cihi
 	# b1 = b0 + h0c0 => b1 = b0
 	matriz_coeficientes[i+1,1] <- 1
