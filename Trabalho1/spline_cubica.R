@@ -51,7 +51,7 @@ spline_cubica_natural <- function(Xs, Ys, Zs, n=length(Xs)-1)
 	segunda_derivada <- c(0,segunda_derivada,0) # primeira e ultima derivada = 0
 
 	# calculando as splines
-	splines <- c()
+	interpolados <- c()
 	
 	for(i in 1:length(Zs))
 	{
@@ -62,12 +62,12 @@ spline_cubica_natural <- function(Xs, Ys, Zs, n=length(Xs)-1)
 				ci <- segunda_derivada[j]/2
 				di <- (segunda_derivada[j+1] - segunda_derivada[j]) / (6*Hi[j])
 				bi <- ddiv[j] - (((segunda_derivada[j+1] + 2*(segunda_derivada[j]))/6) * Hi[j])
-				splines[i] <- (Ai[j] + bi * (Zs[i]-Xs[j]) + ci * (Zs[i]-Xs[j])**2) + di * (Zs[i]-Xs[j])**3
+				interpolados[i] <- (Ai[j] + bi * (Zs[i]-Xs[j]) + ci * (Zs[i]-Xs[j])**2) + di * (Zs[i]-Xs[j])**3
+				cat(sprintf('S%.0f = %.4f + %.4f * (x - %.4f) + %.4f * (x - %.4f)^2 + %.4f * (x - %.4f)^3 \n', j, Ai[j], bi, Xs[j], ci, Xs[j], di, Xs[j]))
 			}
-			cat("i: ",i, " j: ", j, " spline: ", splines[i],"\n")
 		}
 	}
 	cat("Segunda Derivada:", segunda_derivada, "\n")
 	cat("Ais:", Ai, "\n")
-	return(splines)
+	return(interpolados)
 }

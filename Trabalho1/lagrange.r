@@ -23,11 +23,11 @@ lagrange <- function(Xs, Ys, Zs)
 			R <- R + Ys[i] * L
 		}
 
-		cat(sprintf("Polinomio para o ponto %f : ", z))
+		cat("Polinomio para o ponto", z, ": ")
 		for(i in 1:(n-1)) {
-			cat(sprintf("%f * %f +", Ls[i], Ys[i]))
+			cat(Ls[i], '*', Ys[i], '+ ')
 		}
-		cat(sprintf("%f * %f\n", Ls[i+1], Ys[i+1]))
+		cat(Ls[i+1], '*', Ys[i+1], '\n')
 		
 		sprintf("Resultado: %f", R)
 		interpolados <- c(interpolados, R)

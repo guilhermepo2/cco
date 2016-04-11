@@ -83,22 +83,33 @@ spline_quadratica <- function(X,Y,z,n)
 			ci <- c(ci, coeficientes[i])
 		}
 	}
+	
+	cat("Coeficientes:\n")
+	cat("    Ais = ", Ai, "\n")
+	cat("    Bis = ", bi, "\n")
+	cat("    Cis = ", ci, "\n")
 
+	cat("Splines: \n")
+	for(i in 1:(n-1)) {
+		cat(sprintf('    S%.0f = %.4f + %.4f * (x - %.4f) + %.4f * (x - %.4f)^2 \n', i, Ai[i], bi[i], X[i], ci[i], X[i]))
+	}
 	# Interpolando os pontos desejados
 	resultados <- c()
+	s = c() # splines utilizadas
 	for(i in z)
 	{
 		# i é o valor de z que é o valor a ser interpolado
 		for(j in 1:(n-1))
-		{
+		{ 
 			if(i >= X[j] && i <= X[j+1])
 			{
+				s = c(s, j) # utilizei spline j (Sj)
 				res <- Ai[j] + bi[j] * (i - X[j]) + ci[j] * ((i - X[j])^2)
 				resultados <- c(resultados, res)
 			}
 		}
 	}
-	
+	cat("      utilizadas:", s, "\n")
 	# print (resultados)
 	return(resultados)
 	
