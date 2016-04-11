@@ -15,7 +15,8 @@ interpolacao_newton <- function(Xs, Ys, Zs)
 	# zi -> valores a serem interpolados
 	# n -> quantidade de pontos
 	# valor_verdadeiro <- valor verdadeiro de um ponto que deseja se calcular o erro
-	
+	cat("\n    NEWTON\n")
+
 	n <- length(Xs)
 	B <- Ys
 	for(k in 1:(n-1))
@@ -39,11 +40,16 @@ interpolacao_newton <- function(Xs, Ys, Zs)
 	}
 	
 	polinomio <- "Polinomio: "
-	for(i in 1:length(B)-1)
+	polinomio_aux <- ""
+	for(i in 1:(length(B)-1))
 	{
-		polinomio_aux <- sprintf("%f * x^%d +", B[i], i-1)
-		#cat(polinomio,polinomio_aux)
-		polinomio <- paste(polinomio, polinomio_aux)
+		# com esse if, somente vou adicionar os coeficientes que não forem muito
+		# próximos de zero à string 'polinomio'. Isso facilitará a visualização 
+		# do polinômio
+		if(abs(B[i]) > 0.000001) {
+			polinomio_aux <- sprintf("%f * x^%d +", B[i], i-1)
+			polinomio <- paste(polinomio, polinomio_aux)
+		}
 	}
 	polinomio_aux <- sprintf("%f * x^%d", B[i+1], i)
 	polinomio <- paste(polinomio, polinomio_aux)
