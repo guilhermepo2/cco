@@ -1,35 +1,16 @@
-# Sistemas Lineares - Eliminação de Gauss " Ingênuo "
+# Sistemas Lineares - Eliminação de Gauss com Pivoteamento
 # Preservar a matriz original
 
-
-gauss_ingenuo <- function(A, b)
+gauss_pivoteamento <- function(A, b)
 {
-	# B <- matrix(A, nrow=sqrt(length(A)), ncol=sqrt(length(A)))
 	n <- sqrt(length(A))
-	# Exemplo 1 - Input
-	# A <- matrix(0, nrow=2, ncol=2)
-	# A[1,1] <- 0.0003
-	# A[1,2] <- 3
-	# A[2,1] <- 1
-	# A[2,2] <- 1
-	
-	# b <- matrix(b, nrow=length(B), ncol=1)
-	# b <- matrix(0, nrow=2, ncol=1)
-	# b[1,1] <- 2.0001
-	# b[2,1] <- 1
-	
 	B <- matrix(c(A,b), nrow=sqrt(length(A)), ncol=sqrt(length(A))+1)
-	# B[1,1] <- A[1,1]
-	# B[1,2] <- A[1,2]
-	# B[1,3] <- b[1,1]
-	# B[2,1] <- A[2,1]
-	# B[2,2] <- A[2,2]
-	# B[2,3] <- b[2,1]
+	L <- matrix(0, nrow=sqrt(length(A)), ncol=sqrt(length(A)))
+	for(i in 1:dim(L)[1])
+	{
+		L[i,i] <- 1
+	}
 	
-	# print(A)
-	# print(b)
-	# print(B)
-	# ------------------------------------------------------------------------------ #
 	# Resolvendo a Matriz
 	
 	X <- c()
@@ -43,12 +24,15 @@ gauss_ingenuo <- function(A, b)
 			# cat("i: ", i, "\n")
 			# cat("k: ", k, "\n")
 			fator <- B[i,k]/B[k,k]
+			# Colocando o fator na matriz L
+			L[i, k] <- fator
 			for(j in (k):nb) # alterar as linhas abaixo da linha pivo
 			{
 				B[i,j] <- B[i,j] - (fator * B[k,j])
 			}
 		}
 	}
+	print(L)
 	
 	# Substituicao Regressiva
 	X[n] <- B[n,nb]/B[n,n]
