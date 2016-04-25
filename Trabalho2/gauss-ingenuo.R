@@ -9,8 +9,8 @@ gauss_ingenuo <- function(A, b)
 	# Exemplo 1 - Input
 	# A <- matrix(0, nrow=2, ncol=2)
 	# A[1,1] <- 0.0003
-	# A[1,2] <- 3
 	# A[2,1] <- 1
+	# A[1,2] <- 3
 	# A[2,2] <- 1
 	
 	# b <- matrix(b, nrow=length(B), ncol=1)
