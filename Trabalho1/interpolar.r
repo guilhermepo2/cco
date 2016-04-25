@@ -16,13 +16,16 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 	indices <- achar_intervalo(Xs, Zs, nro_pontos)
 	Xs <- Xs[indices]
 	Ys <- Ys[indices]
+	Xs_plot <- seq(from=Xs[1], to=Xs[length(Xs)], length.out=100)
 	
 	switch (metodo,
 		newton = {
 			Ys_interpolados <- interpolacao_newton(Xs, Ys, Zs)
+			Ys_plot <- interpolacao_newton(Xs,Ys, Xs_plot)
 		},
 		lagrange = {
 			Ys_interpolados <- lagrange(Xs, Ys, Zs)
+			Ys_plot <- lagrange(Xs,Ys,Xs_plot)
 		},
 		spline_linear = {
 			Ys_interpolados <- spline_linear(Xs, Ys, Zs, length(Xs))
@@ -32,6 +35,7 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 		},
 		spline_cubica = {
 			Ys_interpolados <- spline_cubica_natural(Xs,Ys,Zs,length(Xs)-1)
+			#Ys_plot <- spline_cubica_natural(Xs,Ys,Xs_plot, length(Xs)-1)
 		}
 	)
 	
@@ -42,9 +46,10 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 	print(Ys_interpolados)
 	
 	if(length(Zs) == 1) {
-		points(Zs, Ys_interpolados,  col='yellow')
+		points(Zs, Ys_interpolados,  col='red')
+		#lines(Xs_plot,Ys_plot, col='black')
 	} else {
-		lines(Zs, Ys_interpolados,  col='yellow')
+		lines(Zs, Ys_interpolados,  col='red')
 	}
 	lines(Xs, 0*Ys, col='black')
 	lines(0*Xs, Ys, col='black')
@@ -52,7 +57,7 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 	
 	#TODO a professora quer o erro pra cada ponto
 	if(!missing(valores_verdadeiros)) {
-		erros <- abs(Ys_interpolados - valores_verdadeiros)
+		erros <- (abs(Ys_interpolados - valores_verdadeiros)/valores_verdadeiros)
 		erros <- erros * 100
 		for(i in 1:length(erros)) {
 			cat(sprintf("Erro Relativo Verdadeiro para o ponto %.4f : %.4f%% \n", Zs[i], erros[i]))

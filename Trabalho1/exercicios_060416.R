@@ -19,8 +19,8 @@ exercicio1 <- function()
 {
 	xe <- c(.1, .6)
 	ye <- c(1.221, 3.3320)	
-	ze <= c(.2, .3)
-	interpolar(xe, ye, ze, metodo="newton", valores_verdadeiros=exp(2*ze))
+	ze <- c(.2, .3)
+	interpolar(xe, ye, ze, metodo="lagrange", valores_verdadeiros=exp(2*ze))
 }
 
 # Exercicio 02 
