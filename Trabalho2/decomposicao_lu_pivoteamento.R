@@ -2,8 +2,8 @@
 # r = 0 -> solucao exata
 
 # Ax = b ---> L(Ux - d) = 0
-#
-decomposicao_lu <- function(A, b)
+
+decomposicao_lu_pivoteamento <- function(A, b)
 {
 	n <- sqrt(length(A))
 	L <- matrix(0, nrow=n, ncol=n)
@@ -42,20 +42,57 @@ decomposicao_lu <- function(A, b)
 	# --------------------------------------------------------------------------------------------------------------------------------
 		
 	# --------------------------------------------------------------------------------------------------------------------------------
-	# Decomposicao ingenua para se obter L e U
+	P <- L # P eh a matriz identidade que vai identificar quais linhas foram trocadas
 	
-	for(k in 1:(n-1))
+	# Obtendo L e U por pivoteamento
+	
+	for(k in 1:(n-1))																# achando o maximo da coluna para fazer a troca
 	{
+		maximo <- abs(U[k,k])
+		indice <- k
+		
 		for(i in (k+1):n)
 		{
-			fator <- U[i,k]/U[k,k]
-			L[i,k] <- fator
-			for(j in 1:n)
+			if(abs(U[i,k] > maximo))
 			{
-				U[i,j] <- U[i,j] - (fator * U[k,j])
+				maximo <- abs(abs(U[i,k]))
+				indice <- i
 			}
 		}
+	
+	if(indice != k) 																# monitorando as trocas na matriz P
+	{
+		aux <- P[k,]
+		P[k,] <- P[i,]
+		P[i,] <- aux
 	}
+	
+	aux <- b[indice]																# fazendo a troca em b
+	b[indice] <- b[k]
+	b[k] <- aux
+	
+	if(k != 1)																		#
+	{
+		for(j in 1:(k-1))
+		{
+			aux <- L[k,j]
+			L[k,j] <- L[ind,j]
+			L[ind,j] <- aux
+		}
+	}
+	
+	for(i in (k+1):n)
+	{
+		L[i,k] <- U[i,k]/U[k,k]
+		for(m in 1:n)
+		{
+			U[i,m] <- U[i,m] - L[i,k]*U[k,m]
+		}
+	}
+	}
+	
+	print(U)
+	print(L)
 	# --------------------------------------------------------------------------------------------------------------------------------
 	# Achando o d
 	
