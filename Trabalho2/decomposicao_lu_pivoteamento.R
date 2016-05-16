@@ -16,7 +16,7 @@ decomposicao_lu_pivoteamento <- function(A, b)
 	}
 
 	U <- matrix(A, nrow=n, ncol=n)
-	X <- matrix(0, nrow=1, ncol=n)
+	X <- matrix(0, nrow=n, ncol=1)
 
 	d <- c()
 	# --------------------------------------------------------------------------------------------------------------------------------

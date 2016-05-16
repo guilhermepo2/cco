@@ -8,7 +8,7 @@ cholesky <- function(A, b)
 
 	if (identical(A, t(A)) == FALSE || all(eigen(A)$values < 0)) {
 		cat("Matriz nao eh simetrica ou nao definida positiva\n")
-		return
+		return()
 	}
 
 	L <- matrix(0, n, n)

@@ -1,6 +1,6 @@
 # Jacobi
 
-jacobi <- function(A, b, erro=(10^(-5)))
+jacobi <- function(A, b, erro=(10^(-5)), iteracoes=50)
 {
 	# erro = Erro a ser atingido
 
@@ -16,7 +16,7 @@ jacobi <- function(A, b, erro=(10^(-5)))
 
 	diagonalPositiva <- 0
 
-	kMAX <- 50												# Numero maximo de iteracoes
+	kMAX <- iteracoes										# Numero maximo de iteracoes
 	e <- 1													# Erro inicial
 	k <- 0													# Iteracao Atual
 	aux <- 0

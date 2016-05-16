@@ -1,6 +1,6 @@
 # Gauss Seidel
 
-gauss_seidel <- function(A, b)
+gauss_seidel <- function(A, b, erro=(10^(-5)), iteracoes=50)
 {
 	x_prox <- c()
 	n <- sqrt(length(A))
@@ -12,8 +12,7 @@ gauss_seidel <- function(A, b)
 	}
 
 	diagonalPositiva <- 0
-	kMAX <- 50
-	erro <- (10^(-5))
+	kMAX <- iteracoes
 	e <- 1
 	k <- 0
 

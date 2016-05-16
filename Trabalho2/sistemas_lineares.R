@@ -12,14 +12,16 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 
 	if (dimensao_coeficientes != dimensao_igualdades) {
 		cat("Numero de coeficientes nao bate com o numero de igualdades!\n")
-		return
+		return()
 	} else if (dimensao_coeficientes %% 1 != 0){
 		# dimensao_coeficientes not integer
 		cat("A matriz de coeficientes deve ser quadrada!\n")
-		return
+		return()
 	}
 
 	A = matrix(coeficientes, nrow=dimensao_coeficientes, ncol=dimensao_coeficientes)
+	cat("Matriz inicial dos coeficientes: \n")
+	print(A)
 
 	if ( identical(A, t(A)) ) {
 		condicionamento = abs(max(eigen(A)$values)) /
@@ -33,7 +35,7 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 	# se o condicionamento for muito alto, a matriz de coeficientes eh considerada
 	# instavel; uma pequena alteracao nela, pode gerar uma grande diferenca no resultado
 
-
+	cat("\n------", metodo, "------\n")
 	switch (metodo,
 		gauss_ingenuo = {
 			Xs = gauss_ingenuo(A, igualdades)
@@ -45,7 +47,7 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 			Xs = decomposicao_lu(A, igualdades)
 		},
 		decomposicao_lu_pivoteamento = {
-			Xs = decomposicao_lu(A, igualdades)
+			Xs = decomposicao_lu_pivoteamento(A, igualdades)
 		},
 		cholesky = {
 			Xs = cholesky(A, igualdades)
@@ -55,11 +57,19 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 		},
 		jacobi = {
 			Xs = jacobi(A, igualdades)
+		},
+		{
+			cat("Metodo \"", metodo, "\" invalido!\n", sep="")
+			return()
 		}
 	)
-	cat("Possíveis valores para Xi:\n", Xs, "\n")
+	cat("--------\n\n")
 
-	residuo = igualdades - (A %*% Xs)
-	cat("Residuo: ", residuo, "\n")
+	cat("Possíveis valores para Xi:\n")
+	print(Xs)
+
+	residuos = igualdades - (A %*% Xs)
+	cat("Residuo:\n")
+	print(residuos)
 
 }

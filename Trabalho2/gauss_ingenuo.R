@@ -6,6 +6,8 @@ gauss_ingenuo <- function(A, b)
 {
 	n <- sqrt(length(A))
 	B <- matrix(c(A,b), nrow=n, ncol=n+1)
+	cat("Matriz B inicial: \n")
+	print(B)
 	X <- c() 										                                  # Coeficientes desejados
 	# --------------------------------------------------------------------------------------------------------------------------------------------------- #
 	# Eliminnação Progressiva - Vai eliminando variáveis das equações até que a matriz do sistema seja uma matriz triangular superior
@@ -46,12 +48,10 @@ gauss_ingenuo <- function(A, b)
 	# --------------------------------------------------------------------------------------------------------------------------------------------------- #
 	# Impressão do Resultado
 
-	cat("-----------------------------------------------\nGauss Ingenuo\n")
-	cat("Matriz B: \n")
+	cat("Matriz B final: \n")
 	print(B)
 	cat("Coeficientes: \n")
 	print(X)
 	cat("Determinante: ", det, "\n")
-	cat("-----------------------------------------------\n")
 	return(X)
 }
