@@ -22,12 +22,15 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 	A = matrix(coeficientes, nrow=dimensao_coeficientes, ncol=dimensao_coeficientes)
 	cat("Matriz inicial dos coeficientes: \n")
 	print(A)
+	cat("Determinante da matriz inicial dos coeficientes: ", det(A), "\n")
+	# caso o determinante for diferente de 0, o sistema tera uma solucao unica
+	# se for 0, nao da pra saber ao certo o comportamento do sistema
 
-	if ( identical(A, t(A)) ) {
+	transposta = t(A)
+	if ( identical(A, transposta) ) {
 		condicionamento = abs(max(eigen(A)$values)) /
 		                  abs(min(eigen(A)$values))
 	} else {
-		transposta = t(A)
 		condicionamento = sqrt(abs(max(eigen(transposta*A)$values))) /
 		                  sqrt(abs(min(eigen(transposta*A)$values)))
 	}
@@ -69,16 +72,20 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 	print(Xs)
 
 	residuos = igualdades - (A %*% Xs)
-	cat("Residuo:\n")
+	cat("Residuos:\n")
 	print(residuos)
-	
 	if(sum(residuos) == 0)
 	{
 		cat("A exatidão da matriz é verificada\n")
 	}
 	else {
-		cat("A exatidão da matriz não é verificada\n")	
+		cat("A exatidão da matriz não é verificada\n")
 	}
+	# caso o residuo for igual a 0, isso quer dizer que o sistema possui uma
+	# solucao exata.
+
+	cat("Norma do Resíduo: ")
+	cat(max(abs(residuos)), "\n")
 }
 
 # Teste 1: sistemas_lineares(c(5,1,0,1,2,8,1,-1,0,-3,6,2,-1,2,1,9),c(6,10,-5,0),"jacobi")
