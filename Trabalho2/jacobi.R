@@ -38,16 +38,16 @@ jacobi <- function(A, b, erro=(10^(-5)), iteracoes=50)
 			x_prox[i] <- 1/A[i,i] * (b[i]-aux)
 		}
 
-		cat("Iteracao: ", k, "\n")
-		cat("x_ant: ", x_ant, "\n" )
-		cat("x_prox: ", x_prox, "\n")
+		#cat("Iteracao: ", k, "\n")
+		#cat("x_ant: ", x_ant, "\n" )
+		#cat("x_prox: ", x_prox, "\n")
 
 		k <- k + 1
 		e = max(abs(x_prox - x_ant)) / max(abs(x_prox))
-		cat("Erro: ", e, "\n")
+		#cat("Erro: ", e, "\n")
 
 		x_ant <- x_prox
-		cat("\n")
+		#cat("\n")
 	}
 
 	# Montando D
@@ -72,27 +72,32 @@ jacobi <- function(A, b, erro=(10^(-5)), iteracoes=50)
 		}
 	}
 
-	# Verificando se a matriz e estritamente positiva
+	# Verificando se a matriz e estritamente positiva (matriz diagonal dominante)
+	diagonais <- seq(from=0,to=0, length.out=n)
 	for(i in 1:n)
 	{
 		for(j in 1:n)
 		{
-			soma <- soma + abs(A[i,j])
+			if(i != j)
+			{
+				soma <- soma + abs(A[i,j])
+			}
 		}
-		if(A[i,i] > soma) diagonalPositiva <- 1
+		if(A[i,i] > soma) diagonais[i] <- 1
 		soma <- 0
 	}
+	if((sum(diagonais) == n) == TRUE) diagonalPositiva <- 1
 
-	if(diagonalPositiva == 1) cat("Estritamente Positiva\n")
-	else cat("Nao e estritamente positiva\n")
+	if(diagonalPositiva == 1) cat("A Matriz é estritamente Positiva (Diagonal Dominante)\n")
+	else cat("A matriz não é estritamente positiva (Diagonal Dominante)\n")
 
 	d <- solve(D)
 	j <- (-d)%*%(E+f) # multiplicacao de matrizes
 	J <- eigen(j)$values
 	J <- abs(J)
-	if(max(J)>1) cat("O metodo nao Converge\n")
-	else cat("O metodo Converge.\n")
+	if(max(J)>1) cat("O método nao Converge\n")
+	else cat("O método Converge.\n")
 	cat("P(J): ", max(J), "\n")
-	cat("Erro: ", e, " Iteracoes: ", k, "\n")
+	cat("Erro: ", e, " Iterações: ", k, "\n")
 	return(x_prox)
 }

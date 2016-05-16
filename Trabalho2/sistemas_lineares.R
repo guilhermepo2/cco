@@ -71,5 +71,17 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 	residuos = igualdades - (A %*% Xs)
 	cat("Residuo:\n")
 	print(residuos)
-
+	
+	if(sum(residuos) == 0)
+	{
+		cat("A exatidão da matriz é verificada\n")
+	}
+	else {
+		cat("A exatidão da matriz não é verificada\n")	
+	}
 }
+
+# Teste 1: sistemas_lineares(c(5,1,0,1,2,8,1,-1,0,-3,6,2,-1,2,1,9),c(6,10,-5,0),"jacobi")
+# Teste 2: sistemas_lineares(c(10, 2, 1, 3, 8, 1, -2, -1, 5),c(57, 20, -4),"jacobi")
+# Teste 3: sistemas_lineares(c(.5, 1, .4, .6, 1, -.4, .3, 1, 1),c(.2, 0, -.6),"gauss_seidel")
+# Teste 4: sistemas_lineares(c(9, 6, -3, 3, 6, 20, 2, 22, -3, 2, 6, 2, 3, 22, 2, 28),c(12, 64, 4, 82),"cholesky")

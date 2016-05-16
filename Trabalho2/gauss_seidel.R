@@ -80,27 +80,35 @@ gauss_seidel <- function(A, b, erro=(10^(-5)), iteracoes=50)
 		}
 	}
 
-	# Verificando Estritamente Positivo
+	diagonais <- seq(from=0,to=0, length.out=n)
 	for(i in 1:n)
 	{
 		for(j in 1:n)
 		{
-			soma <- soma + abs(A[i,j])
+			if(i != j)
+			{
+				soma <- soma + abs(A[i,j])
+			}
 		}
-		if(A[i,i] > soma) diagonalPositiva <- 1
+		if(A[i,i] > soma) diagonais[i] <- 1
 		soma <- 0
 	}
+	if((sum(diagonais) == n) == TRUE) diagonalPositiva <- 1
 
-	if(diagonalPositiva == 1) cat("E Estritamente Positiva\n")
-	else cat("Nao e Estritamente Positiva\n")
+	if(diagonalPositiva == 1) cat("A matriz é Estritamente Positiva (Diagonal Dominante)\n")
+	else cat("A matriz não é Estritamente Positiva (Diagonal Dominante)\n")
 
 	soma <- D+E
 	soma <- solve(soma)
 	s <- (-soma)%*%(f)
 	S <- eigen(s)$values
 	S <- abs(S)
-	if(max(S) > 1) cat("O metodo nao converge\n")
-	else cat("O metodo converge\n")
+	if(max(S) > 1) 
+	{ 
+		cat("O método não converge\n")
+		# return() 
+	}
+	else cat("O método converge\n")
 	cat("P(S): ", max(S), "\n")
 	cat("Erro: ", e, " Iteracoes: ", k, "\n")
 	return(x_prox)
