@@ -7,6 +7,7 @@ decomposicao_lu_pivoteamento <- function(A, b)
 {
 	n <- sqrt(length(A))
 	L <- matrix(0, nrow=n, ncol=n)
+	trocas <- 0
 	
 	# Colocando 1 na diagonal de L
 	for(i in 1:(n))
@@ -70,14 +71,15 @@ decomposicao_lu_pivoteamento <- function(A, b)
 	aux <- b[indice]																# fazendo a troca em b
 	b[indice] <- b[k]
 	b[k] <- aux
+	trocas <- trocas + 1
 	
 	if(k != 1)																		#
 	{
 		for(j in 1:(k-1))
 		{
 			aux <- L[k,j]
-			L[k,j] <- L[ind,j]
-			L[ind,j] <- aux
+			L[k,j] <- L[indice,j]
+			L[indice,j] <- aux
 		}
 	}
 	
@@ -93,6 +95,17 @@ decomposicao_lu_pivoteamento <- function(A, b)
 	
 	print(U)
 	print(L)
+	# --------------------------------------------------------------------------------------------------------------------------------
+	# Achando o detemirnante
+	det <- 1
+	for(i in 1:n)
+	{
+		det <- det * U[i,i]
+	}
+	
+	det <- det / ((-1) ^ trocas)
+	
+	
 	# --------------------------------------------------------------------------------------------------------------------------------
 	# Achando o d
 	
