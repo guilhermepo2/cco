@@ -4,9 +4,9 @@
 
 gauss_ingenuo <- function(A, b)
 {
-	n <- sqrt(length(A))	
+	n <- sqrt(length(A))
 	B <- matrix(c(A,b), nrow=n, ncol=n+1)
-	X <- c() 										                                  # Coeficientes desejados		
+	X <- c() 										                                  # Coeficientes desejados
 	# --------------------------------------------------------------------------------------------------------------------------------------------------- #
 	# Eliminnação Progressiva - Vai eliminando variáveis das equações até que a matriz do sistema seja uma matriz triangular superior
 	nb <- n + 1
@@ -21,7 +21,7 @@ gauss_ingenuo <- function(A, b)
 			}
 		}
 	}
-	
+
 	# --------------------------------------------------------------------------------------------------------------------------------------------------- #
 	# Substituicao Regressiva - Obtendo os coeficientes desejados
 	X[n] <- B[n,nb]/B[n,n]															  # O Último X é calculado manualmente, pois é necessário para os anteriores
@@ -34,7 +34,7 @@ gauss_ingenuo <- function(A, b)
 		}
 		X[i] <- (B[i,nb]-s)/(B[i,i])												  # Xi = Bi,nb - soma / Bi,i
 	}
-	
+
 	# --------------------------------------------------------------------------------------------------------------------------------------------------- #
 	# Calcular determinante da matriz resultante
 	det <- 1
@@ -42,10 +42,10 @@ gauss_ingenuo <- function(A, b)
 	{
 		det <- det * B[i,i]
 	}
-	
+
 	# --------------------------------------------------------------------------------------------------------------------------------------------------- #
 	# Impressão do Resultado
-	
+
 	cat("-----------------------------------------------\nGauss Ingenuo\n")
 	cat("Matriz B: \n")
 	print(B)
@@ -53,5 +53,5 @@ gauss_ingenuo <- function(A, b)
 	print(X)
 	cat("Determinante: ", det, "\n")
 	cat("-----------------------------------------------\n")
-
+	return(X)
 }

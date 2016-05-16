@@ -8,23 +8,23 @@ decomposicao_lu_pivoteamento <- function(A, b)
 	n <- sqrt(length(A))
 	L <- matrix(0, nrow=n, ncol=n)
 	trocas <- 0
-	
+
 	# Colocando 1 na diagonal de L
 	for(i in 1:(n))
 	{
 		L[i,i] <- 1
 	}
-	
+
 	U <- matrix(A, nrow=n, ncol=n)
 	X <- matrix(0, nrow=1, ncol=n)
-	
+
 	d <- c()
 	# --------------------------------------------------------------------------------------------------------------------------------
 		# Calculo de Condicionamento
 		# ||A||2 = λmax se A = At ou gmax se A != At
 		# λmax = |max(eigen(A)$values)|
 		# gmax = sqrt(|max(eigen(t(A)*A)$values))|)
-		
+
 		transposta <- t(U)
 		cond <- 0
 		matriz_comparacao <- transposta == U
@@ -38,20 +38,20 @@ decomposicao_lu_pivoteamento <- function(A, b)
 		{
 			cond <- sqrt(abs(max(eigen(transposta*U)$values)))/sqrt(abs(min(eigen(transposta*U)$values)))
 		}
-		
+
 	cat("Condicionamento: ", cond, "\n")
 	# --------------------------------------------------------------------------------------------------------------------------------
-		
+
 	# --------------------------------------------------------------------------------------------------------------------------------
 	P <- L # P eh a matriz identidade que vai identificar quais linhas foram trocadas
-	
+
 	# Obtendo L e U por pivoteamento
-	
+
 	for(k in 1:(n-1))																# achando o maximo da coluna para fazer a troca
 	{
 		maximo <- abs(U[k,k])
 		indice <- k
-		
+
 		for(i in (k+1):n)
 		{
 			if(abs(U[i,k] > maximo))
@@ -60,19 +60,19 @@ decomposicao_lu_pivoteamento <- function(A, b)
 				indice <- i
 			}
 		}
-	
+
 	if(indice != k) 																# monitorando as trocas na matriz P
 	{
 		aux <- P[k,]
 		P[k,] <- P[i,]
 		P[i,] <- aux
 	}
-	
+
 	aux <- b[indice]																# fazendo a troca em b
 	b[indice] <- b[k]
 	b[k] <- aux
 	trocas <- trocas + 1
-	
+
 	if(k != 1)																		#
 	{
 		for(j in 1:(k-1))
@@ -82,7 +82,7 @@ decomposicao_lu_pivoteamento <- function(A, b)
 			L[indice,j] <- aux
 		}
 	}
-	
+
 	for(i in (k+1):n)
 	{
 		L[i,k] <- U[i,k]/U[k,k]
@@ -92,7 +92,7 @@ decomposicao_lu_pivoteamento <- function(A, b)
 		}
 	}
 	}
-	
+
 	print(U)
 	print(L)
 	# --------------------------------------------------------------------------------------------------------------------------------
@@ -102,15 +102,15 @@ decomposicao_lu_pivoteamento <- function(A, b)
 	{
 		det <- det * U[i,i]
 	}
-	
+
 	det <- det / ((-1) ^ trocas)
-	
-	
+
+
 	# --------------------------------------------------------------------------------------------------------------------------------
 	# Achando o d
-	
+
 	d[1] <- b[1]
-	
+
 	for(i in 2:n)
 	{
 		soma <- 0
@@ -122,19 +122,18 @@ decomposicao_lu_pivoteamento <- function(A, b)
 	}
 	# --------------------------------------------------------------------------------------------------------------------------------
 	# Substituição Regressiva para achar a solução a partir de Ux = d
-	
+
 	X[n] <- d[n]/U[n,n]															      # O Último X é calculado manualmente, pois é necessário para os anteriores
 	for(i in seq((n-1),1,-1))
 	{
 		s <- 0
 		for(j in (i+1):n)
 		{
-			s <- s + U[i,j] * X[j]													
+			s <- s + U[i,j] * X[j]
 		}
-		X[i] <- (d[i]-s)/(U[i,i])												  
+		X[i] <- (d[i]-s)/(U[i,i])
 	}
 	--------------------------------------------------------------------------------------------------------------------------------
-	
-	print(X)
-	
+
+	return(X)
 }
