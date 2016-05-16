@@ -6,8 +6,8 @@ cholesky <- function(A, b)
 	d <- c()
 	X <- c()
 
-	if (identical(A, t(A)) == false || all(eigen(A)$values < 0)) {
-		cat("Matriz nao eh simetrica ou nao definida positiva")
+	if (identical(A, t(A)) == FALSE || all(eigen(A)$values < 0)) {
+		cat("Matriz nao eh simetrica ou nao definida positiva\n")
 		return
 	}
 
