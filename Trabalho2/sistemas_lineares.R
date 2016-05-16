@@ -8,7 +8,7 @@ source("jacobi.R")
 
 sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 	dimensao_coeficientes <- sqrt(length(coeficientes))
-	dimensao_igualdades <- sqrt(length(igualdades))
+	dimensao_igualdades <- length(igualdades)
 
 	if (dimensao_coeficientes != dimensao_igualdades) {
 		cat("Numero de coeficientes nao bate com o numero de igualdades!\n")
@@ -22,11 +22,12 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 	A = matrix(coeficientes, nrow=dimensao_coeficientes, ncol=dimensao_coeficientes)
 
 	if ( identical(A, t(A)) ) {
-		condicionamento = abs(max(eigen(U)$values)) /
-		                  abs(min(eigen(U)$values))
+		condicionamento = abs(max(eigen(A)$values)) /
+		                  abs(min(eigen(A)$values))
 	} else {
-		condicionamento = sqrt(abs(max(eigen(transposta*U)$values))) /
-		                  sqrt(abs(min(eigen(transposta*U)$values)))
+		transposta = t(A)
+		condicionamento = sqrt(abs(max(eigen(transposta*A)$values))) /
+		                  sqrt(abs(min(eigen(transposta*A)$values)))
 	}
 	cat("Condicionamento dos coeficientes: ", condicionamento, "\n")
 	# se o condicionamento for muito alto, a matriz de coeficientes eh considerada
@@ -51,11 +52,14 @@ sistemas_lineares <- function(coeficientes, igualdades, metodo) {
 		},
 		gauss_seidel = {
 			Xs = gauss_seidel(A, igualdades)
-		}
+		},
 		jacobi = {
 			Xs = jacobi(A, igualdades)
 		}
 	)
 	cat("Possíveis valores para Xi:\n", Xs, "\n")
+
+	residuo = igualdades - (A %*% Xs)
+	cat("Residuo: ", residuo, "\n")
 
 }
