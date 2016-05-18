@@ -5,10 +5,10 @@ source("trapezio_multiplo.r")
 
 # A função Trapézio calcula a integração númerica de uma determina função (f) através do método do trapézio simples ou multiplo
 # Entrada -> expressao: expressão da forma expression() não avaliada em R
-#			 f: Uma função que recebe um argumento númerico e retorna uma expressão avaliada nesse argumento
-#			 a: Intervalo inferior de Integração
-#			 b: Intervalo superior de Integração
-#			 n: nós de interpolação, em quantos subintervalos o intervalo será dividido para se procurar o valor máximo para f(alfa)
+#			f: Uma função que recebe um argumento númerico e retorna uma expressão avaliada nesse argumento
+#			a: Intervalo inferior de Integração
+#			b: Intervalo superior de Integração
+#			n: nós de interpolação, em quantos subintervalos o intervalo será dividido para se procurar o valor máximo para f(alfa)
 trapezio <- function(expressao, f, a, b, n, metodo="simples")
 {
 	switch(metodo,
@@ -24,13 +24,13 @@ trapezio <- function(expressao, f, a, b, n, metodo="simples")
 # Função de Integração e Derivação:
 
 # Função integrate(f, lower, upper)
-#					f: uma função em R que aceita um argumento numérico e retornando a expressão avaliada nesse argumento
-#					lower: intervalo inferior de integração
-#					upper: intervalo superior de integração
+#		   f: uma função em R que aceita um argumento numérico e retornando a expressão avaliada nesse argumento
+#		   lower: intervalo inferior de integração
+#		   upper: intervalo superior de integração
 
 # Função D(expr, name)
-#			expr: expressão não avaliada em R ( expression() )
-#			name: string contendo a variável em qual a expressão será derivada
+#	   expr: expressão não avaliada em R ( expression() )
+#	   name: string contendo a variável em qual a expressão será derivada
 
 teste_aula <- function(n, metodo="simples")
 {
