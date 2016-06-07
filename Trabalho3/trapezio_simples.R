@@ -12,17 +12,10 @@ trapezio_simples <- function(expressao, f, a, b, n)
 	# Cálculo do Erro de Interpolação
 	
 	derivada_segunda <- D( D(expressao, "x") , "x")											# Derivada segunda da expressao
-	intervalo <- seq(from=a, to=b, length.out=n)											# Intervalo do cálculo do erro de interpolação
-	x <- abs(avaliar_segunda_derivada(derivada_segunda, intervalo[1]))						# Cálculo de (x - xi) para o cálculo do erro de interpolação
-	for(i in 2:n)
-	{
-		if(x < abs(avaliar_segunda_derivada(derivada_segunda, intervalo[i])))
-		{
-			x <- abs(avaliar_segunda_derivada(derivada_segunda, intervalo[i]))
-		}
-	}
+	x <- seq(from=a, to=b, length.out=n)													# Intervalo do cálculo do erro de interpolação
+	Ys_derivada_segunda <- eval(derivada_segunda)
 	
-	Et <- -1 * ((((b-a)^3) / 12) * x)														# Erro de interpolação
+	erro_interpolacao <- abs(-1/12 * ((((b-a)^3)) * max(Ys_derivada_segunda)))										# Erro de interpolação
 	# ---------------------------------------------------------------------------------------------------------------------------------------
 	cat("Expressao: \n")
 	print(expressao)
@@ -31,7 +24,7 @@ trapezio_simples <- function(expressao, f, a, b, n)
 	cat("Erro Relativo: ", erro_relativo ,"%\n")
 	cat("Derivada Segunda: \n")
 	print(derivada_segunda)
-	cat("Erro de interpolação: ", Et ,"\n")	
+	cat("Erro de interpolação: ", erro_interpolacao ,"\n")	
 	
 	# Plotando o Grafico
 	x <- seq(from=a,to=b,length.out=100)

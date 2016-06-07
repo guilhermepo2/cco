@@ -20,7 +20,7 @@ trapezio_multiplo <- function(expressao, f, a, b, n)
 	x = seq(from=a, to=b, length.out=n)     # esse x é apenas pra funcionar com o eval() abaixo
 	Ys_derivada_segunda = eval(derivada_segunda)
 
-	erro_interpolacao <- -1 * ( ( ((b-a)^3) / (12*(n^2)) ) * max(Ys_derivada_segunda) )
+	erro_interpolacao <- abs(-1/12 * ( ( ((b-a)^3) / ((n^2)) ) * max(Ys_derivada_segunda) ))
 	# ---------------------------------------------------------------------------------------------------------------------------------------
 	cat("Expressao: \n")
 	print(expressao)
