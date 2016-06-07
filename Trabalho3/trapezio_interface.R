@@ -2,6 +2,8 @@
 source("avaliar_segunda_derivada.r")
 source("trapezio_simples.r")
 source("trapezio_multiplo.r")
+source("um_terco_simpson.r")
+source("um_terco_simpson_multiplo.r")
 
 # A função Trapézio calcula a integração númerica de uma determina função (f) através do método do trapézio simples ou multiplo
 # Entrada -> expressao: expressão da forma expression() não avaliada em R
@@ -17,6 +19,9 @@ trapezio <- function(expressao, f, a, b, n, metodo="simples")
 		},
 		multiplo = {
 			trapezio_multiplo(expressao, f, a, b, n)
+		},
+		um_terco_simpson = {
+			um_terco_simpson(expressao, f, a, b, n)
 		}
 	)
 }
@@ -58,6 +63,12 @@ teste_aula <- function(n, metodo="simples")
 		ambos = {
 			trapezio_simples(expressao, f1, a, b, n)
 			trapezio_multiplo(expressao, f1, a, b, n)
+		},
+		um_terco_simpson = {
+			um_terco_simpson(expressao, f1, a, b, n)
+		},
+		um_terco_simpson_multiplo = {
+			um_terco_simpson_multiplo(expressao, f1, a, b, n)
 		}
 	)
 }
