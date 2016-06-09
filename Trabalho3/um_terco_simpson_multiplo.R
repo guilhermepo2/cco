@@ -40,4 +40,5 @@ um_terco_simpson_multiplo <- function(expressao, f, a, b, n)
 	cat("Derivada Quarta: \n")
 	print(derivada_quarta)
 	cat("Erro de interpolação: ", erro_interpolacao ,"\n")	
+	
 }

@@ -9,7 +9,6 @@ tres_oitavos_simpson_multiplo <- function(expressao, f, a, b, n)
 	somatorio_multiplo_3 <- 0
 	somatorio_nao_multiplo_3 <- 0
 	intervalo_somatorio <- seq(from=a+h, to=b-h, by=h)
-	print(intervalo_somatorio)
 	for(i in 1:(n-1))
 	{
 		if(i %% 3 == 0)
@@ -19,9 +18,6 @@ tres_oitavos_simpson_multiplo <- function(expressao, f, a, b, n)
 			somatorio_nao_multiplo_3 <- somatorio_nao_multiplo_3 + f(intervalo_somatorio[i])
 		}
 	}
-	
-	print(somatorio_multiplo_3)
-	print(somatorio_nao_multiplo_3)
 	
 	valor_aproximacao <- ((3/8)*h) * (f(a) + (3 * somatorio_nao_multiplo_3) + (2 * somatorio_multiplo_3) + f(b))		# Aproximação pelo metodo 3/8 Simpson multiplo
 	erro_relativo <- abs((valor_f_integrada - valor_aproximacao) / valor_f_integrada)*100	# Cálculo do erro relativo
