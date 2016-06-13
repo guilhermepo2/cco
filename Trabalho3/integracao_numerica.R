@@ -4,6 +4,7 @@ source("um_terco_simpson.r")
 source("um_terco_simpson_multiplo.r")
 source("tres_oitavos_simpson.r")
 source("tres_oitavos_simpson_multiplo.r")
+source("../Trabalho1/interpolar.r", chdir=TRUE)
 
 # A integracao_numerica calcula a integração númerica de uma determina função (f) através de um desses métodos:
 #																												- Trapézio Simples
@@ -55,28 +56,74 @@ integracao_numerica <- function(expressao, f, a, b, n=NULL, metodo=NULL, toleran
 		)
 
 		n <- ceiling(n)
+		cat("N calculado pela tolerancia: ", n ,"\n")
 	}
 	
-	cat("N calculado pela tolerancia: ", n ,"\n")
+	
+	y_interpolado <- c()
+	x <- seq(from=a, to=b, length.out=100)
 	
 	switch(metodo,
 		trapezio_simples = {
+			y_interpolado <- interpolar(c(a,b), c(f(a),f(b)), x)
 			trapezio_simples(expressao, f, a, b, n)
 		},
 		trapezio_multiplo = {
+			intervalo_aproximacao <- seq(from=a, to=b, by=((b-a)/n))
+			for(i in 1:(length(intervalo_aproximacao)-1))
+			{
+				meu_x <- c(intervalo_aproximacao[i], intervalo_aproximacao[i+1])
+				meu_y <- f(meu_x)
+				# PEGANDO MEUS Zs...
+				t1 <- (x >= meu_x[1]) # Quero todos os zs maiores ou iguais o primeiro x do meu intervalo
+				t2 <- (x < meu_x[2])  # Quero todos os zs menores que o segundo x do meu intervalo
+				t3 <- c()			  # Quero os dois juntos
+				for(j in 1:length(x))
+				{
+					t3 <- c(t3, (t1[j] && t2[j]))
+				}
+				if(i == (length(intervalo_aproximacao)-1)) 
+				{
+					t3[100] <- TRUE
+				}
+				meu_z <- x[t3]
+				#print(t1)
+				#print(t2)
+				#print(t3)
+				#print(meu_x)
+				#print(meu_y)
+				#print(meu_z)
+				#cat("tamanho do meu z: ", length(meu_z), "\n")
+				y_interpolado <- c(y_interpolado, interpolar( meu_x, meu_y, meu_z ))
+			}
 			trapezio_multiplo(expressao, f, a, b, n)
 		},
 		um_terco_simpson = {
+			x_metodo <- seq(from=a, to=b, by=(( b - a ) / 2))
+			y_interpolado <- interpolar(x_metodo, f(x_metodo), x)
 			um_terco_simpson(expressao, f, a, b, n)
 		},
 		um_terco_simpson_multiplo = {
 			um_terco_simpson_multiplo(expressao, f, a, b, n)
 		},
 		tres_oitavos_simpson = {
+			x_metodo <- seq(from=a, to=b, by=(( b - a ) / 3))
+			y_interpolado <- interpolar(x_metodo, f(x_metodo), x)
 			tres_oitavos_simpson(expressao, f, a, b, n)
 		},
 		tres_oitavos_simpson_multiplo = {
+			x_metodo <- seq(from=a,to=b,by=((b-a)/n))
 			tres_oitavos_simpson_multiplo(expressao, f, a, b, n)
 		}
 	)
+	
+	# Plottando !
+	#print(x)
+	#print(f(x))
+	#print(x_metodo)
+	#print(y_metodo)
+	#print("printando a funcao")
+	plot(x,f(x), type="l", col="blue")
+	#print("printando a interpolacao")
+	lines(x, y_interpolado, col="red")
 }

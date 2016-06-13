@@ -33,16 +33,22 @@ trapezio_multiplo <- function(expressao, f, a, b, n)
 	cat("Erro de interpolação: ", erro_interpolacao ,"\n")
 	
 	# Plotando o grafico
-	x <- seq(from=a,to=b,length.out=100)
-	plot(x, f(x), type="l", col="blue")
-	lines(c(a, a+h),c(f(a),f(a+h)), col="red")
-	lines(c(a,a), c(a,f(a)), col="red")
-	lines(c(a+h,a+h), c(a,f(a+h)), col="red")
+	#x <- seq(from=a,to=b,length.out=100)
+	#plot(x, f(x), type="l", col="blue")
+	
+	#lines(c(a, a+h),c(f(a),f(a+h)), col="red")
+	#lines(c(a,a), c(a,f(a)), col="red")
+	#lines(c(a+h,a+h), c(a,f(a+h)), col="red")
+	y <- c(f(a))
 	for(i in intervalo_somatorio) 
 	{
-		lines(c(i,i+h),c(f(i),f(i+h)), col="red")
-		lines(c(i,i),c(0,f(i)), col="red")
+		#lines(c(i,i+h),c(f(i),f(i+h)), col="red")
+		#lines(c(i,i),c(0,f(i)), col="red")
+		y <- c(y,f(i))
 	}
-	lines(c(b-h, b),c(f(b-h),f(b)), col="red")
-	lines(c(b,b), c(0,f(b)), col="red")
+	#lines(c(b-h, b),c(f(b-h),f(b)), col="red")
+	#lines(c(b,b), c(0,f(b)), col="red")
+	y <- c(y,f(b))
+	
+	return(y)
 }

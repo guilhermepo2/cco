@@ -5,7 +5,7 @@ source("spline_quadratica.r")
 source("spline_cubica.r")
 source("intervalo.r")
 
-interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", valores_verdadeiros= NULL)
+interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", valores_verdadeiros= NULL, plot=FALSE)
 {
 	# Xs -> conjunto de valores no eixo Xs
 	# Y -> conjunto de valores no eixo y
@@ -39,20 +39,23 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 		}
 	)
 	
-	plot(Xs, Ys, type='l', col="blue")
-	lines(Zs, Ys_interpolados,  col='red')
+	if(plot)
+	{
+		plot(Xs, Ys, type='l', col="blue")
+		lines(Zs, Ys_interpolados,  col='red')
+		
+		if(length(Zs) == 1) {
+			points(Zs, Ys_interpolados,  col='red')
+			#lines(Xs_plot,Ys_plot, col='black')
+		} else {
+			lines(Zs, Ys_interpolados,  col='red')
+		}
+		lines(Xs, 0*Ys, col='black')
+		lines(0*Xs, Ys, col='black')
+	}
 
 	cat("Valores Interpolados: \n")
 	print(Ys_interpolados)
-	
-	if(length(Zs) == 1) {
-		points(Zs, Ys_interpolados,  col='red')
-		#lines(Xs_plot,Ys_plot, col='black')
-	} else {
-		lines(Zs, Ys_interpolados,  col='red')
-	}
-	lines(Xs, 0*Ys, col='black')
-	lines(0*Xs, Ys, col='black')
 
 	
 	#TODO a professora quer o erro pra cada ponto
@@ -65,7 +68,7 @@ interpolar <- function(Xs, Ys, Zs, nro_pontos= length(Xs), metodo= "newton", val
 		erro <- mean(erros)
 		string_erro <- sprintf("Media dos erros Relativos Verdadeiros: %.4f%%", erro)
 		print(string_erro)
-		points(Zs, valores_verdadeiros, col="green")
+		if(plot) points(Zs, valores_verdadeiros, col="green")
 	}
 	
 	return(Ys_interpolados)

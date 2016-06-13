@@ -27,10 +27,10 @@ trapezio_simples <- function(expressao, f, a, b, n)
 	cat("Erro de interpolação: ", erro_interpolacao ,"\n")	
 	
 	# Plotando o Grafico
-	x <- seq(from=a,to=b,length.out=100)
-	plot(x,f(x),type="l",col="blue")
-	lines(c(a,b), c(f(a),f(b)), col="red")
-	lines(c(a,a), c(0,f(a)), col="red")
-	lines(c(b,b), c(0,f(b)), col="red")
+	# x <- seq(from=a,to=b,length.out=100)
+	# plot(x,f(x),type="l",col="blue")
+	# lines(c(a,b), c(f(a),f(b)), col="red")
+	# lines(c(a,a), c(0,f(a)), col="red")
+	# lines(c(b,b), c(0,f(b)), col="red")
 	
 }
