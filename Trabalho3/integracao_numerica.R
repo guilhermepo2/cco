@@ -104,6 +104,38 @@ integracao_numerica <- function(expressao, f, a, b, n=NULL, metodo=NULL, toleran
 			um_terco_simpson(expressao, f, a, b, n)
 		},
 		um_terco_simpson_multiplo = {
+			if(n%%2!=0)
+			{
+				n <- n + (n%%2)
+				cat("--------------------------------------------------------------\n\n")
+				cat("ATENCAO: n antigo nao era utilizavel no metodo, novo n: ", n, "\n")
+				cat("--------------------------------------------------------------\n\n")
+			}
+			intervalo_aproximacao <- seq(from=a, to=b, by=((b-a)/n))
+			print(intervalo_aproximacao)
+			for(i in seq(from=1,to=length(intervalo_aproximacao)-1, by=2))
+			{
+				#cat("i: ", i, "\n")
+				meu_x <- c(intervalo_aproximacao[i], intervalo_aproximacao[i+1], intervalo_aproximacao[i+2])
+				#print(meu_x)
+				meu_y <- f(meu_x)
+				# PEGANDO MEUS Zs...
+				t1 <- (x >= meu_x[1]) # Quero todos os zs maiores ou iguais o primeiro x do meu intervalo
+				t2 <- (x < meu_x[3])  # Quero todos os zs menores que o ultimo x do meu intervalo
+				t3 <- c()			  # Quero os dois juntos
+				for(j in 1:length(x))
+				{
+					t3 <- c(t3, (t1[j] && t2[j]))
+				}
+				if(i == (length(intervalo_aproximacao)-2)) 
+				{
+					#print(t3)
+					t3[length(x)] <- TRUE
+				}
+			meu_z <- x[t3]
+			y_interpolado <- c(y_interpolado, interpolar( meu_x, meu_y, meu_z ))
+			}
+			
 			um_terco_simpson_multiplo(expressao, f, a, b, n)
 		},
 		tres_oitavos_simpson = {
@@ -112,7 +144,41 @@ integracao_numerica <- function(expressao, f, a, b, n=NULL, metodo=NULL, toleran
 			tres_oitavos_simpson(expressao, f, a, b, n)
 		},
 		tres_oitavos_simpson_multiplo = {
-			x_metodo <- seq(from=a,to=b,by=((b-a)/n))
+			if(n%%3!=0)
+			{
+				if(n%%3==1) n <- n + 2
+				else if(n%%3==2) n <- n + 1
+				
+				cat("--------------------------------------------------------------\n\n")
+				cat("ATENCAO: n antigo nao era utilizavel no metodo, novo n: ", n, "\n")
+				cat("--------------------------------------------------------------\n\n")
+			}
+			
+			intervalo_aproximacao <- seq(from=a, to=b, by=((b-a)/n))
+			print(intervalo_aproximacao)
+			for(i in seq(from=1,to=length(intervalo_aproximacao)-1, by=3))
+			{
+				#cat("i: ", i, "\n")
+				meu_x <- c(intervalo_aproximacao[i], intervalo_aproximacao[i+1], intervalo_aproximacao[i+2], intervalo_aproximacao[i+3])
+				#print(meu_x)
+				meu_y <- f(meu_x)
+				# PEGANDO MEUS Zs...
+				t1 <- (x >= meu_x[1]) # Quero todos os zs maiores ou iguais o primeiro x do meu intervalo
+				t2 <- (x < meu_x[4])  # Quero todos os zs menores que o ultimo x do meu intervalo
+				t3 <- c()			  # Quero os dois juntos
+				for(j in 1:length(x))
+				{
+					t3 <- c(t3, (t1[j] && t2[j]))
+				}
+				if(i == (length(intervalo_aproximacao)-3)) 
+				{
+					#print(t3)
+					t3[length(x)] <- TRUE
+				}
+			meu_z <- x[t3]
+			y_interpolado <- c(y_interpolado, interpolar( meu_x, meu_y, meu_z ))
+			}
+
 			tres_oitavos_simpson_multiplo(expressao, f, a, b, n)
 		}
 	)
@@ -123,7 +189,9 @@ integracao_numerica <- function(expressao, f, a, b, n=NULL, metodo=NULL, toleran
 	#print(x_metodo)
 	#print(y_metodo)
 	#print("printando a funcao")
+	#print(length(y_interpolado))
 	plot(x,f(x), type="l", col="blue")
 	#print("printando a interpolacao")
 	lines(x, y_interpolado, col="red")
+	
 }
