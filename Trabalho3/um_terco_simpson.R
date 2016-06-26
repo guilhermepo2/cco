@@ -14,7 +14,7 @@ um_terco_simpson <- function(expressao, f, a, b, n)
 	x <- seq(from=a, to=b, length.out=n)
 	Ys_derivada_quarta <- eval(derivada_quarta)
 
-	erro_interpolacao <- abs(-1/90 * ((b-a)^5) * max(Ys_derivada_quarta))
+	erro_interpolacao <- abs(-1/2880 * ((b-a)^5) * max(Ys_derivada_quarta))
 	# ---------------------------------------------------------------------------------------------------------------------------------------
 	
 	cat("Expressao: \n")
